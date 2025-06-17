@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class About(models.Model):
@@ -30,6 +31,7 @@ class Skill(models.Model):
 
     name = models.CharField(max_length=100)
     level = models.PositiveIntegerField(default=0)
+    icon = models.ImageField(upload_to='skill_icons/', blank=True, null=True)
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='soft')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -100,6 +102,7 @@ class BlogArticle(models.Model):
     content = models.TextField()
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
     published_at = models.DateTimeField(auto_now_add=True)
+    content = CKEditor5Field('Content')
 
     class Meta:
         ordering = ['-published_at']
@@ -128,10 +131,10 @@ class ContactInfo(models.Model):
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
+    subject = models.CharField(max_length=200, blank=True)
     message = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} - {self.email}"
-
